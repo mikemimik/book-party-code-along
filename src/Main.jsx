@@ -25,11 +25,31 @@ const styles = theme => ({
   },
 });
 
-const cards = [1, 2, 3];
-
 class Main extends Component {
+  constructor () {
+    super()
+
+    this.state = {
+      books: []
+    }
+  }
+
+  async componentWillMount() {
+    const response = await fetch('/api/books')
+    const resp = await response.json()
+
+    this.setState({
+      books: resp.data,
+    })
+  }
+
+  pushToCard = (id) => {
+    this.props.history.push(`/books/${id}`)
+  }
+
   render() {
     const { classes, history } = this.props;
+
     return (
       <React.Fragment>
         <div className={classes.heroContent}>
@@ -57,9 +77,14 @@ class Main extends Component {
             My books
           </Typography>
           <Grid container spacing={4}>
-            {cards.map(card => (
-              <Grid item key={card} xs={12} sm={6} md={4}>
-                <Card title={"Book Title"} subtitle={"By Author Name"} />
+            {this.state.books.map(book => (
+              <Grid item key={book._id} xs={12} sm={6} md={4}>
+                <Card
+                  id={book._id}
+                  title={book.title}
+                  subtitle={book.authorName}
+                  pushToCard={this.pushToCard}
+                />
               </Grid>
             ))}
           </Grid>

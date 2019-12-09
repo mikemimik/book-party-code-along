@@ -13,6 +13,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import Main from "./Main";
 import Form from "./Form";
+import Book from "./Book";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -56,6 +57,11 @@ export default function App() {
           exact
           path="/"
           component={Main}
+        />
+        <Route
+          exact
+          path="/books/:id"
+          component={Book}
         />
       </Switch>
     </Router>

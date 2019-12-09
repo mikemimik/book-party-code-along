@@ -24,7 +24,7 @@ const styles = makeStyles(theme => ({
 
 export default function CardComp(props) {
   const classes = styles();
-  
+  console.log(props)
   return (
     <Card className={classes.card}>
       <CardMedia
@@ -41,7 +41,10 @@ export default function CardComp(props) {
         </Typography>
       </CardContent>
       <CardActions>
-        <IconButton aria-label="more info">
+        <IconButton
+          aria-label="more info"
+          onClick={() => props.pushToCard(props.id) }
+        >
           <InfoIcon />
         </IconButton>
       </CardActions>

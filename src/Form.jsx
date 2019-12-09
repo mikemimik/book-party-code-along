@@ -62,6 +62,30 @@ const useStyles = makeStyles(theme => ({
 export default function Form(props) {
   const classes = useStyles();
   const [rating, updateRating] = useState(1);
+  const [title, updateTitle] = useState('');
+  const [authorName, updateAuthorName] = useState('');
+  const [comment, updateComment] = useState('');
+
+  async function createBook() {
+    try {
+      const response = await fetch('/api/books', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          title,
+          authorName,
+          comment,
+          rating,
+        })
+      })
+      const resp = await response.json()
+      console.log(resp)
+    } catch (err) {
+      console.error(err)
+    }
+  }
 
   return (
     <Container className={classes.content} maxWidth="md">
@@ -79,6 +103,8 @@ export default function Form(props) {
             rowsMax="2"
             className={classes.textField}
             margin="normal"
+            value={authorName}
+            onChange={(e) => { updateAuthorName(e.target.value) }}
           />
           <TextField
             id="standard-multiline-flexible"
@@ -87,6 +113,8 @@ export default function Form(props) {
             rowsMax="2"
             className={classes.textField}
             margin="normal"
+            value={title}
+            onChange={(e) => { updateTitle(e.target.value) }}
           />
           <FormControl>
             <InputLabel shrink htmlFor="select-multiple-native">
@@ -115,6 +143,8 @@ export default function Form(props) {
             className={classes.textField}
             margin="normal"
             variant="outlined"
+            value={comment}
+            onChange={(e) => { updateComment(e.target.value) }}
           />
         </div>
         <div>
@@ -124,6 +154,7 @@ export default function Form(props) {
               variant="outlined"
               color="primary"
               onClick={() => {
+                createBook()
                 props.history.push("/");
               }}
             >

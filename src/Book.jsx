@@ -21,23 +21,38 @@ const styles = makeStyles(theme => ({
 }));
 
 export default function Book(props) {
-  const book = {
-    title: 'wow',
-    authorName: 'wow',
-    rating: 1,
-    comment: 'great book',
-  };
+  const classes = styles();
+  const [book, updateBook] = useState({});
+  const hasRetrievedBook = useRef(false)
+
+  useEffect(() => {
+    async function getPageById() {
+      try {
+        const response = await fetch(`/api/books/${props.match.params.id}`)
+        const resp = await response.json()
+        console.log('resp:', resp)
+        updateBook(resp.data)
+        hasRetrievedBook.current = true
+      } catch (err) {
+        console.error(err)
+      }
+    }
+    if (!hasRetrievedBook.current) {
+      getPageById()
+    }
+  })
+
   return (
     <Container className={classes.bookContainer}>
       <Grid container spacing={2}>
         <Grid item>
-          <image className={classes.img} src="https://source.unsplash.com/800x600" />
+          <img className={classes.img} src="https://source.unsplash.com/800x600" alt='' />
         </Grid>
         <Grid item>
           <Typography className={classes.textPadding} component="h2" variant="h2" align="left" color="textPrimary">
             {book.title}
           </Typography>
-          <Typography className={classes.textPadding} component="h3" variant="subtitle" align="left" color="textPrimary">
+          <Typography className={classes.textPadding} component="h3" variant="subtitle1" align="left" color="textPrimary">
             By {book.authorName}
           </Typography>
           <span>Rating: {book.rating}/5</span>
